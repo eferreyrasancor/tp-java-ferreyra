@@ -48,10 +48,10 @@ public class ProyectoLogicDefaultImpl implements ProyectoLogic{
     @Override
     public Double presupuestoDisponible(Integer idProyecto) {
         // TODO 3.5 buscar el proyecto de la capa DAO
-        Proyecto p = null;
+        Proyecto p = proyectoDao.buscarPorId(idProyecto);
         // TODO 3.5 con una expresion lambda, procesar todas las tareas de un proyecto p 
         //          usando mapToDouble calcular cuanto cuesta cada tarea y usar el operador sum() para sumarizar
-        Double gastado = 0.0;
+        Double gastado = p.getTarea().stream().mapToDouble(Tarea::getCosto).sum();
         // TODO 3.5 el presupuesto disponible es la diferencia entre el presupuesto y lo gastado
         return p.getPresupuesto()-gastado;
     }
@@ -66,6 +66,16 @@ public class ProyectoLogicDefaultImpl implements ProyectoLogic{
         // Crear una tarea
         // Setear todos los atributos 
         // Invocar a TareaDAO para que realice la creación de la tarea        
+        Empleado e = empleadoDao.buscarPorId(idResponsable);
+        if (presupuestoDisponible(idProyecto)-(duracionEstimada*e.getSalarioHora())>=0){
+            Proyecto p = proyectoDao.buscarPorId(idProyecto);
+            t = new Tarea();
+            t.setDescripcion(descripcion);
+            t.setDuracionEstimada(duracionEstimada);
+            t.setResponsable(e);
+            t.setProyecto(p);
+            tareaDao.crear(t);
+        }
         return t;
     } 
 }

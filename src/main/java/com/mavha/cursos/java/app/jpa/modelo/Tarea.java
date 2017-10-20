@@ -61,7 +61,9 @@ public class Tarea {
         this.descripcion = descripcion;
     }
 
-    
+    public Double getCosto(){
+        return duracionEstimada * responsable.getSalarioHora();
+    }
     
     public Integer getDuracionEstimada() {
         return duracionEstimada;

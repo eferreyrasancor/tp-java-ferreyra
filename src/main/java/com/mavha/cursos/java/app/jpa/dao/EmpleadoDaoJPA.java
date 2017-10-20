@@ -9,6 +9,7 @@ import com.mavha.cursos.java.app.jpa.modelo.Empleado;
 import com.mavha.cursos.java.app.jpa.modelo.Tarea;
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 /**
@@ -17,6 +18,7 @@ import javax.persistence.Query;
  */
 public class EmpleadoDaoJPA implements EmpleadoDao{
 
+    @PersistenceContext(unitName = "lab01")
     private EntityManager em;
     
     @Override

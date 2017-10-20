@@ -8,6 +8,7 @@ package com.mavha.cursos.java.app.jpa.modelo;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -28,6 +29,7 @@ public class Empleado {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String nombre;
+    @Column(name = "salarioHora")
     private Double salarioHora;
     //TODO 1.2 definir el tipo temporal 
     @Temporal(javax.persistence.TemporalType.DATE)

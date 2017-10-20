@@ -13,6 +13,7 @@ import com.mavha.cursos.java.app.jpa.modelo.Departamento;
 import com.mavha.cursos.java.app.jpa.modelo.Empleado;
 import java.util.Date;
 import java.util.function.BiPredicate;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -24,9 +25,11 @@ public class EmpleadoLogicDefaultImpl implements EmpleadoLogic{
     private DepartamentoDao departamentoDao;
     
     //TODO  2.1 defina un predicado donde un salario es valido si la media de la empresa es 0.0 o si el salario se encuentra entre el 0.75 y el 1.5 del salario medio
-    private BiPredicate<Double,Double> salarioValidoEmpresa = (mediaEmpresa,salEmpleado)-> true;
+    private BiPredicate<Double,Double> salarioValidoEmpresa = (mediaEmpresa,salEmpleado)
+            -> mediaEmpresa==0.0 || (mediaEmpresa*0.75<=salEmpleado && salEmpleado<=mediaEmpresa*1.5);
     //TODO  2.2 defina un predicado donde un salario es valido si la media del departamento es 0.0 o si el salario se encuentra entre el 0.8 y el 1.2 del salario medio del departamento
-    private BiPredicate<Double,Double> salarioValidoDepto = (mediaDepto,salEmpleado)-> true;
+    private BiPredicate<Double,Double> salarioValidoDepto = (mediaDepto,salEmpleado)
+            -> mediaDepto==0.0 || (mediaDepto*0.8 <= salEmpleado && salEmpleado <= mediaDepto*1.2);
 
     
     public EmpleadoLogicDefaultImpl(){
@@ -63,6 +66,7 @@ public class EmpleadoLogicDefaultImpl implements EmpleadoLogic{
         Departamento depto = departamentoDao.buscarPorId(idDepto);
         //TODO 2.3 implementar una expresión de stream para calcular el salario promedio
         Double salarioMedioDepto = 0.0; //depto.getEmpleados().stream()......orElse(0.0);
+        salarioMedioDepto = depto.getEmpleados().stream().mapToDouble(Empleado::getSalarioHora).average().orElse(0.0);
         if(salarioValidoDepto.test(salarioMedioDepto,emp.getSalarioHora())){
             emp.setTrabajaEn(depto);
             empleadoDao.actualizar(emp);
