@@ -22,12 +22,15 @@ public class EmpleadoDaoJPA implements EmpleadoDao{
     @Override
     public Empleado guardar(Empleado e) {
       //TODO 2.1 implementar el guardado
-      return null;
+      em.persist(e);
+      em.flush();
+      return e;
     }
 
     @Override
     public void borrar(Integer e) {
       //TODO 2.2 implementar el guardado
+      em.remove(e);
     }
     
     @Override
@@ -65,14 +68,18 @@ public class EmpleadoDaoJPA implements EmpleadoDao{
     @Override
     public Double salarioPromedioTodos(){
         ////TODO 2.3 Ejecutar una consulta para conocer el salario promedio de todos los empleados de una empresa
-        return null;
+        return em.createQuery("SELECT AVG(e.salarioHora) FROM Empleado e", Double.class).getSingleResult();
     }
 
     @Override
     public List<Tarea> tareasPendientes(Integer idEmpleado) {
         //TODO 2.4 ejecutar una consulta que retorne todas las tareas que tiene pendiente un Empleado. 
         // Las tareas pendientes son todas las tareas asignadas al empleado, que tiene fecha de fin NULL
-        return null;
+        return em.createQuery("SELECT t FROM Tarea t "
+                + "WHERE t.fechaFin IS NULL "
+                + "AND t.responsable.id = :empleadoId", Tarea.class)
+                .setParameter("empleadoId", idEmpleado)
+                .getResultList();
     }
 
     
